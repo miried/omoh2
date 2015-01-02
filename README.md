@@ -1,14 +1,17 @@
-                   ,---------------------------------------.
-                   |   _                     _       ____  |
-                   |  (_)___  __ _ _  _ __ _| |_____|__ /  |
-                   |  | / _ \/ _` | || / _` | / / -_)|_ \  |
-                   |  |_\___/\__, |\_,_\__,_|_\_\___|___/  |
-                   |            |_|                        |
-                   |                                       |
-                   `---------- http://ioquake3.org --------'
+                   ,--------------------------------------------------------------.
+                   |                                          _                   |
+                   |                                         | |                  |
+                   |    ___  _ __   ___ _ __  _ __ ___   ___ | |__   __ _  __ _   |
+                   |   / _ \| '_ \ / _ \ '_ \| '_ ` _ \ / _ \| '_ \ / _` |/ _` |  |
+                   |  | (_) | |_) |  __/ | | | | | | | | (_) | | | | (_| | (_| |  |
+                   |   \___/| .__/ \___|_| |_|_| |_| |_|\___/|_| |_|\__,_|\__,_|  |
+                   |        | |                                                   |
+                   |        |_|                                                   |
+                   |                                                              |
+                   `---------- http://openmohaa/ -----------------------=---------'
 
-The intent of this project is to provide a baseline Quake 3 which may be used
-for further development and baseq3 fun.
+The intent of this project is to provide a baseline MOHAA which may be used
+for further development and main/ fun.
 Some of the major features currently implemented are:
 
   * SDL backend
