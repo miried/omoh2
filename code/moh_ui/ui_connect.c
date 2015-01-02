@@ -42,6 +42,7 @@ to prevent it from blinking away too rapidly on local or lan games.
 void UI_DrawConnectScreen( qboolean overlay ) {
 	vec4_t col_blue = { 0.0, 0.0, 1.0, 1.0 };
 
+	Com_Printf( "connect screen \n" );
 	UI_FillRect( 0, 0, 640, 480, col_blue );
 }
 

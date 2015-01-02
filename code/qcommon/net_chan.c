@@ -581,8 +581,22 @@ void QDECL NET_OutOfBandPrint( netsrc_t sock, netadr_t adr, const char *format, 
 	string[2] = -1;
 	string[3] = -1;
 
+	// wombat: MOHAA OOB packets carry another byte to indicate the direction
+	// 1 = server, 2 = client
+	switch ( sock ) {
+		case NS_SERVER:
+		string[4] = 1;
+		break;
+		case NS_CLIENT:
+		string[4] = 2;
+		break;
+		default:
+		Com_Error( ERR_DROP, "NET_OutOfBandPrint: Weird sock %i\n", sock );
+		break;
+	}		
+
 	va_start( argptr, format );
-	Q_vsnprintf( string+4, sizeof(string)-4, format, argptr );
+	Q_vsnprintf( string+5, sizeof(string)-5, format, argptr );
 	va_end( argptr );
 
 	// send the datagram
@@ -607,13 +621,27 @@ void QDECL NET_OutOfBandData( netsrc_t sock, netadr_t adr, byte *format, int len
 	string[2] = 0xff;
 	string[3] = 0xff;
 
+	// wombat: MOHAA OOB packets carry another byte to indicate the direction
+	// 1 = server, 2 = client
+	switch ( sock ) {
+		case NS_SERVER:
+		string[4] = 1;
+		break;
+		case NS_CLIENT:
+		string[4] = 2;
+		break;
+		default:
+		Com_Error( ERR_DROP, "NET_OutOfBandData: Weird sock %i\n", sock );
+		break;
+	}
+
 	for(i=0;i<len;i++) {
-		string[i+4] = format[i];
+		string[i+5] = format[i];
 	}
 
 	mbuf.data = string;
-	mbuf.cursize = len+4;
-	Huff_Compress( &mbuf, 12);
+	mbuf.cursize = len+5;
+	Huff_Compress( &mbuf, 13);
 	// send the datagram
 	NET_SendPacket( sock, mbuf.cursize, mbuf.data, adr );
 }

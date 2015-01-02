@@ -310,10 +310,10 @@ typedef struct {
 */
 
 
-#define BSP_IDENT	(('P'<<24)+('S'<<16)+('B'<<8)+'I')
-		// little-endian "IBSP"
+#define BSP_IDENT	(('5'<<24)+('1'<<16)+('0'<<8)+'2')
+		// little-endian "2015"
 
-#define BSP_VERSION			46
+#define BSP_VERSION			19
 
 
 // there shouldn't be any problem with increasing these values at the

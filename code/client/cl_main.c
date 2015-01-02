@@ -2340,6 +2340,11 @@ void CL_CheckForResend( void ) {
 		break;
 		
 	case CA_CHALLENGING:
+		// wombat: sending conect here: an example connect string from MOHAA looks like this:
+		// "connect "\challenge\-1629263210\qport\9683\protocol\8
+		// \name\wombat\rate\25000\dm_playermodel\american_ranger
+		// \snaps\20\dm_playergermanmodel\german_wehrmacht_soldier""
+
 		// sending back the challenge
 		port = Cvar_VariableValue ("net_qport");
 
@@ -2367,7 +2372,7 @@ void CL_CheckForResend( void ) {
 		}
     data[9+i] = '"';
 		data[10+i] = 0;
-
+Com_Printf( "connect string %s\n", data );
     // NOTE TTimo don't forget to set the right data length!
 		NET_OutOfBandData( NS_CLIENT, clc.serverAddress, (byte *) &data[0], i+10 );
 		// the most current userinfo has been sent, so watch for any
@@ -2572,6 +2577,8 @@ void CL_ConnectionlessPacket( netadr_t from, msg_t *msg ) {
 	MSG_BeginReadingOOB( msg );
 	MSG_ReadLong( msg );	// skip the -1
 
+	MSG_ReadByte( msg ); // wombat: skip the direction byte
+
 	s = MSG_ReadStringLine( msg );
 
 	Cmd_TokenizeString( s );
@@ -2644,7 +2651,10 @@ void CL_ConnectionlessPacket( netadr_t from, msg_t *msg ) {
 		else
 #endif
 		{
-			if(!*c || challenge != clc.challenge)
+			// wombat: MOHAA servers don't send our own challenge back
+			if ( Cmd_Argc()==2 )
+				clc.compat=qtrue;
+			else if ( (!*c || challenge != clc.challenge) )
 			{
 				Com_Printf("Bad challenge for challengeResponse. Ignored.\n");
 				return;
@@ -2762,6 +2772,16 @@ void CL_ConnectionlessPacket( netadr_t from, msg_t *msg ) {
 	// list of servers sent back by a master server (extended)
 	if ( !Q_strncmp(c, "getserversExtResponse", 21) ) {
 		CL_ServersResponsePacket( &from, msg, qtrue );
+		return;
+	}
+
+	// wombat: mohaa servers send this to reject clients
+	// TODO: tell the UI to draw serverdisconnect.urc serverfull.urc or servertimeout.urc
+	if ( !Q_stricmp(c, "droperror") ) {
+		s = MSG_ReadString( msg );
+		Com_Printf( "Server dropped connection. Reason: \"%s\"", s );
+		Cvar_Set("com_errorMessage", s );
+		CL_Disconnect( qtrue );
 		return;
 	}
 
@@ -3538,7 +3558,7 @@ void CL_Init( void ) {
 	cl_consoleKeys = Cvar_Get( "cl_consoleKeys", "~ ` 0x7e 0x60", CVAR_ARCHIVE);
 
 	// userinfo
-	Cvar_Get ("name", "UnnamedPlayer", CVAR_USERINFO | CVAR_ARCHIVE );
+	Cvar_Get ("name", "openmohaa2", CVAR_USERINFO | CVAR_ARCHIVE );
 	cl_rate = Cvar_Get ("rate", "25000", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get ("snaps", "20", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get ("model", "sarge", CVAR_USERINFO | CVAR_ARCHIVE );
