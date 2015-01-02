@@ -13,6 +13,12 @@ BUILD_STANDALONE=1
 BUILD_SERVER=0
 # no need for missionpack
 BUILD_MISSIONPACK=0
+
+USE_FREETYPE=1
+USE_CURL=0
+USE_CODEC_OPUS=0
+USE_VOIP=0
+USE_MUMBLE=0
 ###########################################
 
 COMPILE_PLATFORM=$(shell uname|sed -e s/_.*//|tr '[:upper:]' '[:lower:]'|sed -e 's/\//_/g')
@@ -256,7 +262,7 @@ CGDIR=$(MOUNT_DIR)/cgame
 BLIBDIR=$(MOUNT_DIR)/botlib
 NDIR=$(MOUNT_DIR)/null
 UIDIR=$(MOUNT_DIR)/ui
-Q3UIDIR=$(MOUNT_DIR)/q3_ui
+MOHUIDIR=$(MOUNT_DIR)/moh_ui
 JPDIR=$(MOUNT_DIR)/jpeg-8c
 SPEEXDIR=$(MOUNT_DIR)/libspeex
 OGGDIR=$(MOUNT_DIR)/libogg-1.3.1
@@ -853,7 +859,7 @@ ifeq ($(PLATFORM),sunos)
   CC=gcc
   INSTALL=ginstall
   MKDIR=gmkdir
-  COPYDIR="/usr/local/share/games/quake3"
+  COPYDIR="/usr/local/share/games/omoh2"
 
   ifneq ($(ARCH),x86)
     ifneq ($(ARCH),sparc)
@@ -1330,7 +1336,7 @@ endif
 $(B).zip: $(TARGETS)
 ifeq ($(PLATFORM),darwin)
   ifdef ARCHIVE
-	@("./make-macosx-app.sh" release $(ARCH); if [ "$$?" -eq 0 ] && [ -d "$(B)/ioquake3.app" ]; then rm -f $@; cd $(B) && zip --symlinks -r9 ../../$@ `find "ioquake3.app" -print | sed -e "s!$(B)/!!g"`; else rm -f $@; cd $(B) && zip -r9 ../../$@ $(NAKED_TARGETS); fi)
+	@("./make-macosx-app.sh" release $(ARCH); if [ "$$?" -eq 0 ] && [ -d "$(B)/openmohaa2.app" ]; then rm -f $@; cd $(B) && zip --symlinks -r9 ../../$@ `find "openmohaa2.app" -print | sed -e "s!$(B)/!!g"`; else rm -f $@; cd $(B) && zip -r9 ../../$@ $(NAKED_TARGETS); fi)
   endif
 endif
 ifneq ($(PLATFORM),darwin)
@@ -2485,46 +2491,13 @@ $(B)/$(MISSIONPACK)/vm/qagame.qvm: $(MPGVMOBJ) $(GDIR)/g_syscalls.asm $(Q3ASM)
 
 Q3UIOBJ_ = \
   $(B)/$(BASEGAME)/ui/ui_main.o \
-  $(B)/$(BASEGAME)/ui/bg_misc.o \
-  $(B)/$(BASEGAME)/ui/bg_lib.o \
-  $(B)/$(BASEGAME)/ui/ui_addbots.o \
   $(B)/$(BASEGAME)/ui/ui_atoms.o \
-  $(B)/$(BASEGAME)/ui/ui_cdkey.o \
-  $(B)/$(BASEGAME)/ui/ui_cinematics.o \
-  $(B)/$(BASEGAME)/ui/ui_confirm.o \
   $(B)/$(BASEGAME)/ui/ui_connect.o \
-  $(B)/$(BASEGAME)/ui/ui_controls2.o \
-  $(B)/$(BASEGAME)/ui/ui_credits.o \
-  $(B)/$(BASEGAME)/ui/ui_demo2.o \
-  $(B)/$(BASEGAME)/ui/ui_display.o \
-  $(B)/$(BASEGAME)/ui/ui_gameinfo.o \
   $(B)/$(BASEGAME)/ui/ui_ingame.o \
-  $(B)/$(BASEGAME)/ui/ui_loadconfig.o \
   $(B)/$(BASEGAME)/ui/ui_menu.o \
-  $(B)/$(BASEGAME)/ui/ui_mfield.o \
-  $(B)/$(BASEGAME)/ui/ui_mods.o \
-  $(B)/$(BASEGAME)/ui/ui_network.o \
-  $(B)/$(BASEGAME)/ui/ui_options.o \
-  $(B)/$(BASEGAME)/ui/ui_playermodel.o \
-  $(B)/$(BASEGAME)/ui/ui_players.o \
-  $(B)/$(BASEGAME)/ui/ui_playersettings.o \
-  $(B)/$(BASEGAME)/ui/ui_preferences.o \
-  $(B)/$(BASEGAME)/ui/ui_qmenu.o \
-  $(B)/$(BASEGAME)/ui/ui_removebots.o \
-  $(B)/$(BASEGAME)/ui/ui_saveconfig.o \
-  $(B)/$(BASEGAME)/ui/ui_serverinfo.o \
-  $(B)/$(BASEGAME)/ui/ui_servers2.o \
-  $(B)/$(BASEGAME)/ui/ui_setup.o \
-  $(B)/$(BASEGAME)/ui/ui_sound.o \
-  $(B)/$(BASEGAME)/ui/ui_sparena.o \
-  $(B)/$(BASEGAME)/ui/ui_specifyserver.o \
-  $(B)/$(BASEGAME)/ui/ui_splevel.o \
-  $(B)/$(BASEGAME)/ui/ui_sppostgame.o \
-  $(B)/$(BASEGAME)/ui/ui_spskill.o \
-  $(B)/$(BASEGAME)/ui/ui_startserver.o \
-  $(B)/$(BASEGAME)/ui/ui_team.o \
-  $(B)/$(BASEGAME)/ui/ui_teamorders.o \
-  $(B)/$(BASEGAME)/ui/ui_video.o \
+  \
+  $(B)/$(MISSIONPACK)/ui/bg_misc.o \
+  $(B)/$(MISSIONPACK)/ui/bg_lib.o \
   \
   $(B)/$(BASEGAME)/qcommon/q_math.o \
   $(B)/$(BASEGAME)/qcommon/q_shared.o
@@ -2745,13 +2718,13 @@ $(B)/$(MISSIONPACK)/game/%.asm: $(GDIR)/%.c $(Q3LCC)
 $(B)/$(BASEGAME)/ui/bg_%.o: $(GDIR)/bg_%.c
 	$(DO_UI_CC)
 
-$(B)/$(BASEGAME)/ui/%.o: $(Q3UIDIR)/%.c
+$(B)/$(BASEGAME)/ui/%.o: $(MOHUIDIR)/%.c
 	$(DO_UI_CC)
 
 $(B)/$(BASEGAME)/ui/bg_%.asm: $(GDIR)/bg_%.c $(Q3LCC)
 	$(DO_UI_Q3LCC)
 
-$(B)/$(BASEGAME)/ui/%.asm: $(Q3UIDIR)/%.c $(Q3LCC)
+$(B)/$(BASEGAME)/ui/%.asm: $(MOHUIDIR)/%.c $(Q3LCC)
 	$(DO_UI_Q3LCC)
 
 $(B)/$(MISSIONPACK)/ui/bg_%.o: $(GDIR)/bg_%.c

@@ -1917,6 +1917,12 @@ static qboolean ParseShader( char **text )
 			ParseSort( text );
 			continue;
 		}
+		// MOHAA-specific shader parameters come here
+		else if ( !Q_stricmp(token, "force32bit") ) 
+		{
+			ri.Printf(PRINT_WARNING, "WARNING: force32bit shader parameter used\n" );
+			continue;
+		}
 		else
 		{
 			ri.Printf( PRINT_WARNING, "WARNING: unknown general shader parameter '%s' in '%s'\n", token, shader.name );

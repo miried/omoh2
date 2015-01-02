@@ -653,6 +653,11 @@ void Con_DrawSolidConsole( float frac ) {
 		y = 0;
 	}
 	else {
+		color[0] = 0.3;
+		color[1] = 0.3;
+		color[2] = 0.3;
+		color[3] = 1.0;
+		re.SetColor( color );
 		SCR_DrawPic( 0, 0, SCREEN_WIDTH, y, cls.consoleShader );
 	}
 
@@ -665,7 +670,7 @@ void Con_DrawSolidConsole( float frac ) {
 
 	// draw the version number
 
-	re.SetColor( g_color_table[ColorIndex(COLOR_RED)] );
+	re.SetColor( g_color_table[ColorIndex(COLOR_GREEN)] );
 
 	i = strlen( Q3_VERSION );
 
@@ -685,7 +690,7 @@ void Con_DrawSolidConsole( float frac ) {
 	if (con.display != con.current)
 	{
 	// draw arrows to show the buffer is backscrolled
-		re.SetColor( g_color_table[ColorIndex(COLOR_RED)] );
+		re.SetColor( g_color_table[ColorIndex(COLOR_GREEN)] );
 		for (x=0 ; x<con.linewidth ; x+=4)
 			SCR_DrawSmallChar( con.xadjust + (x+1)*SMALLCHAR_WIDTH, y, '^' );
 		y -= SMALLCHAR_HEIGHT;
