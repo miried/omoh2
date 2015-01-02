@@ -33,6 +33,9 @@ char *svc_strings[256] = {
 	"svc_serverCommand",
 	"svc_download",
 	"svc_snapshot",
+	"svc_centerprint",
+	"svc_locprint",
+	"svc_cgameMessage",
 	"svc_EOF",
 	"svc_voip",
 };
@@ -857,6 +860,53 @@ void CL_ParseCommandString( msg_t *msg ) {
 	Q_strncpyz( clc.serverCommands[ index ], s, sizeof( clc.serverCommands[ index ] ) );
 }
 
+/*
+=====================
+CL_ParseCGMessage
+
+MOHAA does this inside its cgame. its some big function with a 37-switch case
+but unless we properly read the CG message, we don't know when the message
+hase finished
+=====================
+*/
+void CL_ParseCGMessage( msg_t *msg ) {
+	//cl_currentMSG = msg;
+	//VM_Call( cgvm, CG_PARSEMSG );
+	Com_Printf( "received unprocessed CG message.\n" );
+}
+
+/*
+=====================
+CL_ParseLocationprint
+=====================
+*/
+void CL_ParseLocationprint( msg_t *msg ) {
+	int x, y;
+	char *string;
+
+	x = MSG_ReadShort( msg );
+	y = MSG_ReadShort( msg );
+	string = MSG_ReadString(msg);
+
+	//if ( cgvm )
+	//	VM_Call( cgvm, CG_LOCATIONPRINT, string, x, y );
+	Com_Printf( "received locprint \"%s\".\n", string );
+}
+
+/*
+=====================
+CL_ParseCenterprint
+=====================
+*/
+void CL_ParseCenterprint( msg_t *msg ) {
+	char *string;
+
+	string = MSG_ReadString( msg );
+	//if ( cgvm )
+	//	VM_Call( cgvm, CG_CENTERPRINT, string );
+	Com_Printf( "received locprint \"%s\".\n", string );
+}
+
 
 /*
 =====================
@@ -923,6 +973,18 @@ void CL_ParseServerMessage( msg_t *msg ) {
 			break;
 		case svc_download:
 			CL_ParseDownload( msg );
+			break;
+		case svc_centerprint:
+			CL_ParseCenterprint( msg );
+			break;
+		case svc_locprint:
+			CL_ParseLocationprint( msg );
+			break;
+		case svc_cgameMessage:
+			if(cgvm==0) {
+				Com_Error(ERR_DROP,"CL_ParseServerMessage: tried to parse cg message without cgame loaded\n");
+			}
+			CL_ParseCGMessage( msg );
 			break;
 		case svc_voip:
 #ifdef USE_VOIP

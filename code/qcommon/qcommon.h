@@ -297,6 +297,9 @@ enum svc_ops_e {
 	svc_serverCommand,			// [string] to be executed by client game module
 	svc_download,				// [short] size [size bytes]
 	svc_snapshot,
+	svc_centerprint,
+	svc_locprint,
+	svc_cgameMessage,
 	svc_EOF,
 
 // new commands, supported only by ioquake3 protocol but not legacy
