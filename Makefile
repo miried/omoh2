@@ -4,9 +4,16 @@
 # GNU Make required
 #
 
+###########################################
+# use clang compiler
 CC=clang
+# no compatibility with original q3
 BUILD_STANDALONE=1
+# we don't care about the server right now
+BUILD_SERVER=0
+# no need for missionpack
 BUILD_MISSIONPACK=0
+###########################################
 
 COMPILE_PLATFORM=$(shell uname|sed -e s/_.*//|tr '[:upper:]' '[:lower:]'|sed -e 's/\//_/g')
 
