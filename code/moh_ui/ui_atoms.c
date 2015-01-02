@@ -105,16 +105,6 @@ int UI_StringWidth( const char* str ) {
 	return width;
 }
 
-void UI_Text_PaintChar ( float x, float y, float width, float height, float scale, float s, float t, float s2, float t2, qhandle_t hShader ) {
-	float w, h;
-
-	w = width * scale;
-	h = height * scale;
-	UI_AdjustFrom640 ( &x, &y, &w, &h );
-
-	trap_R_DrawStretchPic( x, y, w, h, s, t, s2, t2, hShader );
-}
-
 /*
 =================
 UI_DrawString
@@ -177,14 +167,25 @@ void UI_DrawString( int x, int y, const char* str, int style, vec4_t color )
 		//UI_DrawString2(x+2,y+2,str,dropcolor,charw,charh);
 	}
 
+	Com_Printf( "DrawString called: %s\n", str );
 	//UI_DrawString2(x,y,str,drawcolor,charw,charh);
 }
 
-/*
-void SCR_Text_Paint ( float x, float y, float scale, const vec4_t color, const char *text, float adjust, int limit, int style, const fontInfo_t *font ) {
+#ifdef BUILD_FREETYPE
+void UI_Text_PaintChar ( float x, float y, float width, float height, float scale, float s, float t, float s2, float t2, qhandle_t hShader ) {
+	float w, h;
+
+	w = width * scale;
+	h = height * scale;
+	UI_AdjustFrom640 ( &x, &y, &w, &h );
+
+	trap_R_DrawStretchPic( x, y, w, h, s, t, s2, t2, hShader );
+}
+
+void UI_Text_Paint ( float x, float y, float scale, const vec4_t color, const char *text, float adjust, int limit, int style, const fontInfo_t *font ) {
 	int len, count;
 	vec4_t newColor;
-	glyphInfo_t *glyph;
+	const glyphInfo_t *glyph;
 	float useScale;
 
 	useScale = scale * font->glyphScale;
@@ -193,7 +194,7 @@ void SCR_Text_Paint ( float x, float y, float scale, const vec4_t color, const c
 //      const unsigned char *s = text;
 		const char *s = text;
 
-		re.SetColor ( color );
+		UI_SetColor ( color );
 		memcpy ( &newColor[ 0 ], &color[ 0 ], sizeof ( vec4_t ) );
 		len = strlen ( text );
 		if ( limit > 0 && len > limit ) {
@@ -206,7 +207,7 @@ void SCR_Text_Paint ( float x, float y, float scale, const vec4_t color, const c
 			if ( Q_IsColorString ( s ) ) {
 				memcpy ( newColor, ( float * ) g_color_table[ ColorIndex ( *( s + 1 ) ) ], sizeof ( newColor ) );
 				newColor[ 3 ] = color[ 3 ];
-				re.SetColor ( newColor );
+				UI_SetColor ( newColor );
 				s += 2;
 				continue;
 			} else {
@@ -216,14 +217,14 @@ void SCR_Text_Paint ( float x, float y, float scale, const vec4_t color, const c
 					int ofs = 1;               //style == ITEM_TEXTSTYLE_SHADOWED ? 1 : 2;
 
 					colorBlack[ 3 ] = newColor[ 3 ];
-					re.SetColor ( colorBlack );
-					SCR_Text_PaintChar ( x + ofs, y - yadj + ofs,
+					UI_SetColor ( colorBlack );
+					UI_Text_PaintChar ( x + ofs, y - yadj + ofs,
 					                     glyph->imageWidth,
 					                     glyph->imageHeight, useScale, glyph->s, glyph->t, glyph->s2, glyph->t2, glyph->glyph );
 					colorBlack[ 3 ] = 1.0;
-					re.SetColor ( newColor );
+					UI_SetColor ( newColor );
 				}
-				SCR_Text_PaintChar ( x, y - yadj,
+				UI_Text_PaintChar ( x, y - yadj,
 				                     glyph->imageWidth,
 				                     glyph->imageHeight, useScale, glyph->s, glyph->t, glyph->s2, glyph->t2, glyph->glyph );
 
@@ -232,10 +233,10 @@ void SCR_Text_Paint ( float x, float y, float scale, const vec4_t color, const c
 				count++;
 			}
 		}
-		re.SetColor ( NULL );
+		UI_SetColor ( NULL );
 	}
 }
-*/
+#endif // BUILD_FREETYPE
 
 qboolean UI_IsFullscreen( void ) {
 	return qtrue;

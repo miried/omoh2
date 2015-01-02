@@ -9,12 +9,12 @@
 CC=clang
 # no compatibility with original q3
 BUILD_STANDALONE=1
-# we don't care about the server right now
+# server is not under development
 BUILD_SERVER=0
 # no need for missionpack
 BUILD_MISSIONPACK=0
 
-USE_FREETYPE=1
+USE_FREETYPE=0
 USE_CURL=0
 USE_CODEC_OPUS=0
 USE_VOIP=0
