@@ -1,8 +1,12 @@
 #
-# ioq3 Makefile
+# omoh2 Makefile
 #
 # GNU Make required
 #
+
+CC=clang
+BUILD_STANDALONE=1
+BUILD_MISSIONPACK=0
 
 COMPILE_PLATFORM=$(shell uname|sed -e s/_.*//|tr '[:upper:]' '[:lower:]'|sed -e 's/\//_/g')
 
@@ -96,19 +100,19 @@ endif
 export CROSS_COMPILING
 
 ifndef VERSION
-VERSION=1.36
+VERSION=1.13
 endif
 
 ifndef CLIENTBIN
-CLIENTBIN=ioquake3
+CLIENTBIN=omoh2
 endif
 
 ifndef SERVERBIN
-SERVERBIN=ioq3ded
+SERVERBIN=omoh2ded
 endif
 
 ifndef BASEGAME
-BASEGAME=baseq3
+BASEGAME=main
 endif
 
 ifndef BASEGAME_CFLAGS
@@ -124,7 +128,7 @@ MISSIONPACK_CFLAGS=-DMISSIONPACK
 endif
 
 ifndef COPYDIR
-COPYDIR="/usr/local/games/quake3"
+COPYDIR="/usr/local/games/omoh2"
 endif
 
 ifndef COPYBINDIR
