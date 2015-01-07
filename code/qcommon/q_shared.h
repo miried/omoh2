@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
   #define HOMEPATH_NAME_WIN		"OMoH2"
   #define HOMEPATH_NAME_MACOSX		HOMEPATH_NAME_WIN
   #define GAMENAME_FOR_MASTER		"mohaa"	// must NOT contain whitespace
-//  #define LEGACY_PROTOCOL	// You probably don't need this for your standalone game
+  #define LEGACY_PROTOCOL	// You probably don't need this for your standalone game
 #else
   #define PRODUCT_NAME			"ioq3"
   #define BASEGAME			"baseq3"
