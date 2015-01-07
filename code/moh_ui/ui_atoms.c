@@ -404,6 +404,8 @@ void UI_Init( void ) {
 	uis.back_a = trap_R_RegisterShaderNoMip( "sepiaload_a" );
 	uis.back_b = trap_R_RegisterShaderNoMip( "sepiaload_b" );
 	//trap_R_RegisterFont("Monospace", 14, &uis.font);
+	
+	uis.main_theme	= trap_S_RegisterSound( "sound/music/mus_MainTheme_01d.mp3", qfalse );
 }
 
 /*

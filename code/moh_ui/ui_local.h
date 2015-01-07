@@ -62,6 +62,7 @@ typedef struct {
 	qhandle_t		cursor;
 	qhandle_t		back_a;
 	qhandle_t		back_b;
+	sfxHandle_t		main_theme;
 } uiStatic_t;
 
 extern void			UI_Init( void );

@@ -188,6 +188,10 @@ ifndef USE_CURL_DLOPEN
   endif
 endif
 
+ifndef USE_CODEC_MP3
+USE_CODEC_MP3=1
+endif
+
 ifndef USE_CODEC_VORBIS
 USE_CODEC_VORBIS=0
 endif
@@ -1013,6 +1017,11 @@ ifeq ($(USE_CURL),1)
   endif
 endif
 
+ifeq ($(USE_CODEC_MP3),1)
+  BASE_CFLAGS += -DUSE_CODEC_MP3=1
+  CLIENT_LDFLAGS += -lmad
+endif
+
 ifeq ($(USE_CODEC_OPUS),1)
   CLIENT_CFLAGS += -DUSE_CODEC_OPUS
   ifeq ($(USE_INTERNAL_OPUS),1)
@@ -1601,6 +1610,7 @@ Q3OBJ = \
   $(B)/client/snd_codec_wav.o \
   $(B)/client/snd_codec_ogg.o \
   $(B)/client/snd_codec_opus.o \
+  $(B)/client/snd_codec_mp3.o \
   \
   $(B)/client/qal.o \
   $(B)/client/snd_openal.o \

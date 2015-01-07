@@ -124,6 +124,10 @@ void S_CodecInit()
 {
 	codecs = NULL;
 
+#if USE_CODEC_MP3
+	S_CodecRegister(&mp3_codec);
+#endif
+
 #ifdef USE_CODEC_OPUS
 	S_CodecRegister(&opus_codec);
 #endif

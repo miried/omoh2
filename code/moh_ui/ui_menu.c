@@ -46,5 +46,7 @@ void UI_MainMenu( void ) {
 	uis.activemenu = 1;
 
 	trap_Key_SetCatcher( KEYCATCH_UI );
+	
+	trap_S_StartLocalSound( uis.main_theme, CHAN_LOCAL_SOUND );
 }
 
