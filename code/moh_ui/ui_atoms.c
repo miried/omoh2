@@ -246,6 +246,7 @@ void UI_ForceMenuOff (void)
 {
 	uis.activemenu = 0;
 
+	trap_S_StopBackgroundTrack();
 	trap_Key_SetCatcher( trap_Key_GetCatcher() & ~KEYCATCH_UI );
 	trap_Key_ClearStates();
 	trap_Cvar_Set( "cl_paused", "0" );
@@ -403,9 +404,6 @@ void UI_Init( void ) {
 
 	uis.back_a = trap_R_RegisterShaderNoMip( "sepiaload_a" );
 	uis.back_b = trap_R_RegisterShaderNoMip( "sepiaload_b" );
-	//trap_R_RegisterFont("Monospace", 14, &uis.font);
-	
-	uis.main_theme	= trap_S_RegisterSound( "sound/music/mus_MainTheme_01d.mp3", qfalse );
 }
 
 /*

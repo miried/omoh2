@@ -47,6 +47,6 @@ void UI_MainMenu( void ) {
 
 	trap_Key_SetCatcher( KEYCATCH_UI );
 	
-	trap_S_StartLocalSound( uis.main_theme, CHAN_LOCAL_SOUND );
+	trap_S_StartBackgroundTrack( "sound/music/mus_MainTheme_01d.mp3", NULL );
 }
 
